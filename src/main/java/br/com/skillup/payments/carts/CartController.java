@@ -1,6 +1,8 @@
 package br.com.skillup.payments.carts;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.skillup.payments.carts.dtos.CartView;
+import br.com.skillup.payments.carts.requests.CartItemRequest;
 import br.com.skillup.payments.carts.requests.CreateCartRequest;
 import br.com.skillup.payments.carts.requests.UpdateCartRequest;
 import jakarta.validation.Valid;
@@ -37,6 +40,13 @@ public class CartController {
     @PostMapping("/create")
     public ResponseEntity<?> create(@RequestBody @Valid CreateCartRequest request){
         final var cart = cartService.createCartWithItems(request);
+
+        return ResponseEntity.ok(CartView.of(cart));
+    }
+
+    @PostMapping("/items/{id}/add")
+    public ResponseEntity<?> add(@PathVariable("id") UUID cartId, @RequestBody @Valid CartItemRequest request){
+        final var cart = cartService.addItemToCart(cartId, request);
 
         return ResponseEntity.ok(CartView.of(cart));
     }

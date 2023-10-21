@@ -3,6 +3,7 @@ package br.com.skillup.payments.carts;
 import static jakarta.persistence.GenerationType.UUID;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -135,5 +136,10 @@ public class Cart {
             .stream()
             .map(CartItem::amount)
             .reduce(BigDecimal.ZERO, (accumulator, current) -> accumulator.add(current));
+    }
+
+    public void addItem(CartItem item) {
+        items.add(item);
+        this.amount = this.amount.add(item.amount(), MathContext.DECIMAL64);
     }
 }

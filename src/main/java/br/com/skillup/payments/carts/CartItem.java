@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.Optional;
 
+import br.com.skillup.payments.carts.requests.CartItemRequest;
 import br.com.skillup.payments.products.Product;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -68,6 +69,10 @@ public class CartItem {
         return Optional.ofNullable(product)
             .map(product -> product.getPrice().multiply(BigDecimal.valueOf(quantity), MathContext.DECIMAL64))
             .orElse(BigDecimal.ZERO);
+    }
+
+    public void merge(CartItemRequest request){
+        this.quantity = request.quantity();
     }
 
     public Integer getQuantity() {
